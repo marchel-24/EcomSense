@@ -46,4 +46,4 @@ Untuk membantu pengguna dalam mengambil keputusan sebelum membeli suatu produk, 
 - **Target Customer:** UMKM  
 - **Kelebihan:** Bukalapak Mitra menawarkan dukungan komunitas bagi pengusaha kecil, fitur grosir dan kemitraan, serta program pelatihan dan edukasi untuk UMKM.  
 - **Kekurangan:** Tidak semua fitur tersedia secara gratis dan kurang fleksibel dalam kustomisasi toko.  
-- **Key Competitive Advantage & Unique Value:** Menyediakan fitur komunitas untuk membantu pengusaha saling berbagi pengalaman dan meningkatkan bisnis mereka.  
+- **Key Competitive Advantage & Unique Value:** Menyediakan fitur komunitas untuk membantu pengusaha saling berbagi pengalaman dan meningkatkan bisnis mereka.
