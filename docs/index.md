@@ -73,7 +73,7 @@ Pengguna potensial utama dari aplikasi ini adalah calon pembeli. Selain itu, bra
 ![ERD](erd.png)
 
 ## Low-Fidelity Wireframe
-![Mock-up1](Lo-fiDesign/Picture1.jpg)
+![Mock-up1](/docs/Lo-FiDesign/Picture1.jpg)
 
 
 ## Gantt Chart
