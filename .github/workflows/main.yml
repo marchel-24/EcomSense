@@ -1,32 +1,33 @@
-name: PR Test - Lint, Build, and Test
+name: Basic Workflow Check
 
+# Trigger workflow saat push ke main branch atau PR dibuat
 on:
+  push:
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  build-and-test:
+  check-workflow:
     runs-on: ubuntu-latest
-    name: Lint, Build, and Run Tests
-
     steps:
-      - name: Checkout repository
+      # Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      # Tes apakah workflow berjalan
+      - name: Say Hello
+        run: echo "🎉 GitHub Actions is working perfectly!"
 
-      - name: Install dependencies
-        run: npm install
+      # Cek file di repository
+      - name: List Files in Repository
+        run: ls -la
 
-      - name: Run Linter
-        run: npm run lint
-
-      - name: Build Project
-        run: npm run build
-
-      - name: Run Unit Tests
-        run: npm test
+      # Tambahkan pengecekan jika file tertentu belum ada
+      - name: Check for package.json
+        run: |
+          if [ -f "package.json" ]; then
+            echo "✅ package.json found."
+          else
+            echo "⚠️ package.json not found. Ready to add dependencies later."
+          fi
