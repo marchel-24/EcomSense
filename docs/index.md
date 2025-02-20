@@ -1,6 +1,6 @@
 # EcomSense
 
-## Kelompok 06
+## Kelompok B1_06
 **Anggota Kelompok:**
 - Marchel Rianra Glendrikho Simanjuntak (22/494013/TK/54157)
 - Lana Fitria Dewani (22/494292/TK/54203)
