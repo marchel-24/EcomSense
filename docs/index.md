@@ -77,7 +77,9 @@ Pengguna potensial utama dari aplikasi ini adalah calon pembeli. Selain itu, bra
 ![Mock-up2](Picture2.jpg)
 ![Mock-up3](Picture3.jpg)
 ![Mock-up4](Picture4.jpg)
-![Mock-up5](./Test/Picture5.jpg)
+<p align="center">
+  <img src="./Test/Picture5.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
+</p>
 
 ## Gantt Chart
 ![Gantt-Chart](gant-chart.png)
