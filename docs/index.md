@@ -47,3 +47,31 @@ Untuk membantu pengguna dalam mengambil keputusan sebelum membeli suatu produk, 
 - **Kelebihan:** Bukalapak Mitra menawarkan dukungan komunitas bagi pengusaha kecil, fitur grosir dan kemitraan, serta program pelatihan dan edukasi untuk UMKM.  
 - **Kekurangan:** Tidak semua fitur tersedia secara gratis dan kurang fleksibel dalam kustomisasi toko.  
 - **Key Competitive Advantage & Unique Value:** Menyediakan fitur komunitas untuk membantu pengusaha saling berbagi pengalaman dan meningkatkan bisnis mereka.
+
+## Tujuan Produk
+Membantu calon customer dalam memilih produk yang sesuai dengan preferensi yang diinginkan. Dengan menggunakan konsep AI, chatbot nantinya dapat memberikan rekomendasi produk yang sesuai dengan kebutuhan pengguna dan menganalisis sentimen dari ulasan produk.
+
+## Pengguna Potensial
+Pengguna potensial utama dari aplikasi ini adalah calon pembeli. Selain itu, brand dan produsen juga dapat menggunakan produk ini untuk mengamati perkembangan serta performa produk mereka berdasarkan analisis sentimen ulasan.
+
+## Use Case Diagram
+![Use Case Diagram](use-case-diagram.png)
+
+## Functional Requirements
+
+| **Fitur**                        | **Deskripsi**                                                                                                                       |
+|----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| **Panduan Pengguna**             | Sistem menampilkan pop-up berisi panduan penggunaan saat pertama kali user membuka web.                                              |
+| **Autentikasi**                  | Pengguna dapat melakukan login untuk mengakses fitur personalisasi, seperti penyimpanan dan pengelolaan riwayat pencarian.           |
+| **Pencarian**                    | Pengguna dapat memasukkan nama produk di kolom pencarian, dengan fitur auto-suggestion berdasarkan riwayat pencarian.                |
+| **Pengambilan dan Analisis Data**| Sistem mengambil review dari Shopee dan Tokopedia, kemudian melakukan analisis sentimen untuk menghasilkan skor kelayakan produk.    |
+| **Hasil Analisis Sentimen**      | Sistem menampilkan skor analisis sentimen dan 3–4 review terpilih yang paling representatif.                                          |
+| **Perbandingan Toko**            | Sistem menampilkan perbandingan harga dan rating dari berbagai toko terkait produk yang dicari.                                       |
+| **Rekomendasi Produk**           | Sistem memberikan rekomendasi toko terbaik untuk pembelian beserta link, serta alternatif produk serupa yang relevan.                |
+
+## Entity Relationship Diagram
+
+## Low-Fidelity Wireframe
+
+## Gantt Chart
+
