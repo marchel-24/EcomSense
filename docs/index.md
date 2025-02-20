@@ -73,10 +73,18 @@ Pengguna potensial utama dari aplikasi ini adalah calon pembeli. Selain itu, bra
 ![ERD](erd.png)
 
 ## Low-Fidelity Wireframe
-![Mock-up1](Picture1.jpg)
-![Mock-up2](Picture2.jpg)
-![Mock-up3](Picture3.jpg)
-![Mock-up4](Picture4.jpg)
+<p align="center">
+  <img src="./Test/Picture1.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
+</p>
+<p align="center">
+  <img src="./Test/Picture2.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
+</p>
+<p align="center">
+  <img src="./Test/Picture3.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
+</p>
+<p align="center">
+  <img src="./Test/Picture4.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
+</p>
 <p align="center">
   <img src="./Test/Picture5.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
 </p>
