@@ -70,7 +70,15 @@ Pengguna potensial utama dari aplikasi ini adalah calon pembeli. Selain itu, bra
 | **Rekomendasi Produk**           | Sistem memberikan rekomendasi toko terbaik untuk pembelian beserta link, serta alternatif produk serupa yang relevan.                |
 
 ## Entity Relationship Diagram
+![ERD](erd.png)
 
 ## Low-Fidelity Wireframe
+- ![Mock-up1](Lo-fiDesign/Picture1.jpg)
+- ![Mock-up2](Lo-fiDesign/Picture2.jpg)
+- ![Mock-up3](Lo-fiDesign/Picture3.jpg)
+- ![Mock-up4](Lo-fiDesign/Picture4.jpg)
+- ![Mock-up5](Lo-fiDesign/Picture5.jpg)
+
 
 ## Gantt Chart
+![Gantt-Chart](gant-chart.png)
