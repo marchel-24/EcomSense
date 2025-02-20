@@ -55,6 +55,7 @@ Untuk membantu pengguna dalam mengambil keputusan sebelum membeli suatu produk, 
 - **Key Competitive Advantage & Unique Value:** Menyediakan fitur komunitas untuk membantu pengusaha saling berbagi pengalaman dan meningkatkan bisnis mereka.  
 
 ## Use Case Diagram
+![Use Case Diagram](use-case-diagram.png)
 
 ## Functional Requirements
 - **Panduan Pengguna:** Sistem menampilkan pop-up berisi panduan penggunaan saat pertama kali user membuka web.  
