@@ -1,6 +1,5 @@
 name: Basic Workflow Check
 
-# Trigger workflow saat push ke main branch atau PR dibuat
 on:
   push:
     branches: [main]
@@ -11,19 +10,15 @@ jobs:
   check-workflow:
     runs-on: ubuntu-latest
     steps:
-      # Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Tes apakah workflow berjalan
       - name: Say Hello
         run: echo "🎉 GitHub Actions is working perfectly!"
 
-      # Cek file di repository
       - name: List Files in Repository
         run: ls -la
 
-      # Tambahkan pengecekan jika file tertentu belum ada
       - name: Check for package.json
         run: |
           if [ -f "package.json" ]; then
