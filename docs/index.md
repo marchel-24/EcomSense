@@ -74,4 +74,3 @@ Pengguna potensial utama dari aplikasi ini adalah calon pembeli. Selain itu, bra
 ## Low-Fidelity Wireframe
 
 ## Gantt Chart
-
