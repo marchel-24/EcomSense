@@ -4,7 +4,7 @@
 **Anggota Kelompok:**
 - Marchel Rianra Glendrikho Simanjuntak (22/494013/TK/54157)
 - Lana Fitria Dewani (22/494292/TK/54203)
-- Nama 3 (NIM 3)
+- Moh. Nazril Ilham (22/493142/TK/54000)
 
 ## Project Senior Project TI
 **Instansi:**  
