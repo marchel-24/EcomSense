@@ -73,12 +73,21 @@ Pengguna potensial utama dari aplikasi ini adalah calon pembeli. Selain itu, bra
 ![ERD](erd.png)
 
 ## Low-Fidelity Wireframe
-- ![Mock-up1](Lo-fiDesign/Picture1.jpg)
-- ![Mock-up2](Lo-fiDesign/Picture2.jpg)
-- ![Mock-up3](Lo-fiDesign/Picture3.jpg)
-- ![Mock-up4](Lo-fiDesign/Picture4.jpg)
-- ![Mock-up5](Lo-fiDesign/Picture5.jpg)
-
+<p align="center">
+  <img src="./Test/Picture1.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
+</p>
+<p align="center">
+  <img src="./Test/Picture2.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
+</p>
+<p align="center">
+  <img src="./Test/Picture3.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
+</p>
+<p align="center">
+  <img src="./Test/Picture4.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
+</p>
+<p align="center">
+  <img src="./Test/Picture5.jpg" alt="Low-Fidelity Wireframe" style="border: 2px solid #000; border-radius: 8px;" width="500"/>
+</p>
 
 ## Gantt Chart
 ![Gantt-Chart](gant-chart.png)
