@@ -34,32 +34,32 @@ export default function Home() {
 
         {/* Product Section */}
         <SectionTitle title="Where To Buy?" description="Here are the best places to buy iPhone 13 from trusted stores. Tap to see more!" />
-        <div className="grid grid-cols-4 gap-4">
-          <ProductCard
-            image="/iphone.png"
-            price="9,499 juta"
-            storeName="Cellular World Official Store"
-            productLink="https://example.com/product1"
-          />
-          <ProductCard
-            image="/iphone.png"
-            price="9,499 juta"
-            storeName="Cellular World Official Store"
-            productLink="https://example.com/product1"
-          />
-          <ProductCard
-            image="/iphone.png"
-            price="9,499 juta"
-            storeName="Cellular World Official Store"
-            productLink="https://example.com/product1"
-          />
-          <ProductCard
-            image="/iphone.png"
-            price="9,499 juta"
-            storeName="Cellular World Official Store"
-            productLink="https://example.com/product1"
-          />
-        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 max-w-6xl mx-auto">
+      <ProductCard
+        image="/iphone.png"
+        price="9,499 juta"
+        storeName="Cellular World Official Store"
+        productLink="https://example.com/product1"
+      />
+      <ProductCard
+        image="/iphone.png"
+        price="9,499 juta"
+        storeName="Cellular World Official Store"
+        productLink="https://example.com/product1"
+      />
+      <ProductCard
+        image="/iphone.png"
+        price="9,499 juta"
+        storeName="Cellular World Official Store"
+        productLink="https://example.com/product1"
+      />
+      <ProductCard
+        image="/iphone.png"
+        price="9,499 juta"
+        storeName="Cellular World Official Store"
+        productLink="https://example.com/product1"
+      />
+    </div>
 
         {/* Other Products Section */}
         <SectionTitle title="Here's Similar Product For You" description="Let's explore similar product and see what people are saying!" />
