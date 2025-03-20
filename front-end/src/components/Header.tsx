@@ -18,7 +18,7 @@ const Header = () => {
         />
       </div>
 
-      <ProfileButton name="icaaaaaaaa" profilePic="/maudy-ayunda.png" />
+      <ProfileButton name="Ica" profilePic="/maudy-ayunda.png" />
     </header>
   );
 };
