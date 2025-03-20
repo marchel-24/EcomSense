@@ -4,12 +4,22 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
 interface AuthPopUpProps {
-  isSignUp?: boolean;
+  onClose: () => void;
 }
 
-const AuthPopUp: React.FC<AuthPopUpProps> = ({ isSignUp = false }) => {
+const AuthPopUp: React.FC<AuthPopUpProps> = ({ onClose }) => {
+  const [isSignUp, setIsSignUp] = useState<boolean>(false);
+
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] text-center">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] text-center relative">
+      {/* Close Button */}
+      <button 
+        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        onClick={onClose}
+      >
+        ✕
+      </button>
+
       {/* Title */}
       <h2 className="text-2xl font-bold text-[#413E3E]">
         {isSignUp ? "Create an Account" : "Welcome Back!"}
@@ -23,12 +33,15 @@ const AuthPopUp: React.FC<AuthPopUpProps> = ({ isSignUp = false }) => {
         {isSignUp ? "Sign up with Google" : "Sign in with Google"}
       </button>
 
-      {/* Other text */}
+      {/* Toggle between Sign In / Sign Up */}
       <p className="mt-2 text-gray-500">
         {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-        <a href="#" className="text-[#F25500] font-bold">
+        <button 
+          onClick={() => setIsSignUp(!isSignUp)} 
+          className="text-[#F25500] font-bold"
+        >
           {isSignUp ? "Login" : "Sign Up"}
-        </a>
+        </button>
       </p>
     </div>
   );

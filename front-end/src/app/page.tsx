@@ -1,91 +1,50 @@
-import SearchInputLong from "@/components/SearchInputLong";
-import ProductCard from "@/components/ProductCard";
-import OtherProduct from "@/components/OtherProduct";
-import ReviewCard from "@/components/ReviewCard";
-import BubbleText from "@/components/BubbleText";
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import SearchInput from "@/components/SearchInput";
 import Header from "@/components/Header";
-import SectionTitle from "@/components/SectionTitle";
+import SearchHistory from "@/components/SearchHistory";
 
 export default function Home() {
+  const [isFocused, setIsFocused] = useState(false);
+  const [inputValue, setInputValue] = useState(""); // State untuk input
+
   return (
-    <main className="flex justify-center items-center flex-col h-screen bg-[#F7F0EA] ">
-      {/* Header */}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#F7F0EA] text-[#a3a3a3] text-center px-6 ">
       <div className="fixed top-5 left-0 w-full z-10 bg-transparent flex justify-center">
-        <Header />
+        <Header hideLogo={true} />
       </div>
 
-      {/* Konten utama yang bisa di-scroll */}
-      <div className="flex-1 overflow-auto mt-[80px] mb-[80px] flex flex-col items-center w-full mx-auto p-8 pl-11 lg:pl-8 gap-4">
+      {/* Logo */}
+      <Image
+        src="/EcomSense.png"
+        alt="EcomSense Logo"
+        width={550}
+        height={550}
+        className="mb-3 w-[70%] max-w-[550px] min-w-[350px] transition-all duration-300"
+      />
 
-        {/* BubbleText */}
-        <div className="w-full flex justify-center mb-6">
-          <BubbleText text="Iphone 13" />
-        </div>
+      {/* Deskripsi */}
+      <p className="max-w-[900px] text-[11px]/4 md:text-[13px]/4.5 lg:text-[15px]]/5.5 font-bold tracking-wide transition-all duration-300 mb-6 px-1 sm:px-8 md:px-12">
+        Finding the best product has never been easier! EcomSense helps you determine whether a product is worth buying, where to purchase it, and discover alternative options. Powered by advanced AI, our chatbot provides real-time insights, price comparisons, and user reviews to ensure you make the best shopping decisions effortlessly. Start your smarter shopping journey today!
+      </p>
 
-        {/* Review Section */}
-        <SectionTitle title="Worth To Buy!!!" description="iPhone 13 gets great reviews! Check out their thoughts!" />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full lg:w-[880px]">
-          <ReviewCard username="biutifafp" review="MasyaAllahhh cantik bangettt ya Allahhh warnanya. Rasanya kayak mimpi bisa kebeliii hp ini 🥺🥺🥺🥺" />
-          <ReviewCard username="fird4_" review="Warnanya beneran lebih cakep dari yang di foto, nggak nyesel belii." />
-          <ReviewCard username="safrinaaa" review="Packingnya rapi dan aman. Barang sesuai deskripsi!" />
-          <ReviewCard username="rezky.m" review="Waduhhh, beli ini bikin hati bahagiaaa! Sumpah recommended banget deh!" />
-        </div>
+      {/* Komponen Search */}
+      <div className="relative w-[90%] max-w-[940px] flex justify-center">
+        <SearchInput setIsFocused={setIsFocused} inputValue={inputValue} setInputValue={setInputValue} />
 
-
-        {/* Product Section */}
-        <SectionTitle title="Where To Buy?" description="Here are the best places to buy iPhone 13 from trusted stores. Tap to see more!" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <ProductCard
-            image="/iphone.png"
-            price="9,499 juta"
-            storeName="Cellular World Official Store"
-            productLink="https://example.com/product1"
-          />
-          <ProductCard
-            image="/iphone.png"
-            price="9,499 juta"
-            storeName="Cellular World Official Store"
-            productLink="https://example.com/product1"
-          />
-          <ProductCard
-            image="/iphone.png"
-            price="9,499 juta"
-            storeName="Cellular World Official Store"
-            productLink="https://example.com/product1"
-          />
-          <ProductCard
-            image="/iphone.png"
-            price="9,499 juta"
-            storeName="Cellular World Official Store"
-            productLink="https://example.com/product1"
-          />
-        </div>
-
-        {/* Other Products Section */}
-        <SectionTitle title="Here's Similar Product For You" description="Let's explore similar product and see what people are saying!" />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full lg:w-[900px]">
-          <OtherProduct
-            image="/iphonebiru.jpg"
-            productName="iPhone 13"
-            price="9-10 juta"
-          />
-          <OtherProduct
-            image="/iphonebiru.jpg"
-            productName="iPhone 13"
-            price="9-10 juta"
-          />
-          <OtherProduct
-            image="/iphonebiru.jpg"
-            productName="iPhone 13"
-            price="9-10 juta"
-          />
-        </div>
+        {/* Search History */}
+        {isFocused && (
+          <div className="absolute justify-center top-full mt-2 w-full max-w-[940px] z-20">
+            <SearchHistory setIsFocused={setIsFocused} setInputValue={setInputValue} />
+          </div>
+        )}
       </div>
 
-      {/* Search Input */}
-      <div className="fixed bottom-10 w-full z-10 bg-transparent flex justify-center px-4 md:px-8 lg:px-1 lg:pr-[13px]">
-        <SearchInputLong />
-      </div>
-    </main>
+      <footer className="fixed bottom-3 text-xs text-[#a3a3a3]">
+        <p>Shop smarter, buy better with EcomSense!</p>
+      </footer>
+    </div>
   );
 }
