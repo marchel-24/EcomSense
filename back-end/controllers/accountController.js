@@ -29,3 +29,50 @@ exports.getAccounts = async (req, res) => {
 
     res.status(200).json(data);
 };
+
+exports.getUserAccount = async (req, res) => {
+    const {id} = req.body;
+    const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', id);
+
+    if (error) return res.status(500).json({ error: error.message });
+
+    res.status(200).json(data);
+}
+
+exports.updatePasswrd = async (req, res) => {
+    const { id } = req.params;
+    const { newPassword } = req.body;
+
+    const userId = parseInt(id, 10);
+    if (isNaN(userId)) {
+        return res.status(400).json({ error: "Invalid ID format" });
+    }
+
+    if (!newPassword) {
+        return res.status(400).json({ error: "Password harus diisi" });
+    }
+
+    // Debugging: cek apakah ID ada di database sebelum update
+    const { data: existingUser, error: findError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+    if (findError || !existingUser) {
+        return res.status(404).json({ error: "User tidak ditemukan" });
+    }
+
+    const { data, error } = await supabase
+        .from('users')
+        .update({ password: newPassword })
+        .eq('id', userId)
+        .select(); // Pakai .select() agar data yang diperbarui dikembalikan
+
+    if (error) return res.status(500).json({ error: error.message });
+
+    res.status(200).json({ message: "Password berhasil diperbarui", data });
+};
