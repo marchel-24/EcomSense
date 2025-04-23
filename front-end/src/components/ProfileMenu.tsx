@@ -21,13 +21,14 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ name, onClose, onOpenAuth }) 
             <li
               className="flex items-center px-4 py-2 text-white hover:bg-[#e27847] cursor-pointer"
               onClick={() => {
-                alert("Favorite clicked!");
+                router.push("/favorite"); // Navigasi ke halaman /favorite
                 onClose();
               }}
             >
               <FaStar className="text-white mr-2" />
               Favorite
             </li>
+
             {/* Log Out */}
             <li
               className="flex items-center px-4 py-2 text-white hover:bg-[#e27847] cursor-pointer"

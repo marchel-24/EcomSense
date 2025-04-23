@@ -27,10 +27,11 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ name, profilePic }) => {
 
   return (
     <div className="relative" ref={buttonRef}>
-      {/* Tombol Profile */}
+      {/* Tombol Profile dengan Hover Efek */}
       <div
         className="flex items-center bg-[#F25500] px-2 md:px-3 rounded-md sm:rounded-xl cursor-pointer transition-all duration-300 
-        min-w-[20px] md:min-w-[80px] max-w-[180px] lg:max-w-[200px] h-10 md:h-12 lg:h-14"
+        min-w-[20px] md:min-w-[80px] max-w-[180px] lg:max-w-[200px] h-10 md:h-12 lg:h-14 
+        hover:scale-105 hover:shadow-lg hover:bg-[#d64b00]"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-[#F4E2D0] font-bold truncate flex-1 
@@ -58,12 +59,10 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ name, profilePic }) => {
 
       {/* Pop-up Login/Sign Up */}
       {isAuthOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-30 backdrop-blur-sm">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-30 backdrop-blur-sm ">
           <AuthPopUp onClose={() => setIsAuthOpen(false)} />
         </div>
       )}
-
-
     </div>
   );
 };

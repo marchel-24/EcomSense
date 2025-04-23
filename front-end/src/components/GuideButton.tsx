@@ -11,7 +11,7 @@ const GuideButton = () => {
     <>
       <button
         onClick={() => setGuideOpen(true)}
-        className="w-10 h-10 sm:w-14 sm:h-14 bg-[#F25500] flex items-center justify-center rounded-md sm:rounded-xl flex-shrink-0 transition-all duration-300"
+        className="w-10 h-10 sm:w-14 sm:h-14 bg-[#F25500] flex items-center justify-center rounded-md sm:rounded-xl flex-shrink-0 transition-all duration-300 hover:bg-[#d64b00] hover:shadow-lg hover:scale-110"
       >
         <MdOutlineQuestionMark className="text-[#F4E2D0] text-3xl font-bold" />
       </button>

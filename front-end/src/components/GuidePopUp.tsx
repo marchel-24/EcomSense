@@ -13,7 +13,7 @@ const GuidePopup: FC<GuidePopupProps> = ({ onClose }) => {
         {/* Tombol Close */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-4 text-gray-400 hover:text-gray-600 text-base"
+          className="absolute top-3 right-4 text-gray-400 hover:text-gray-600 text-base transform transition-all duration-200 hover:scale-110 hover:text-[#F25500]"
         >
           ✕
         </button>

@@ -3,7 +3,7 @@ const ScoreAndTitle = ({ title, description, score }: { title: string; descripti
         <div className="w-full max-w-[1080px] flex items-center gap-4">
             {/* Kotak Score (hanya muncul kalau score ada) */}
             {score && (
-                <div className="bg-orange-500 text-white font-bold text-xl px-3 py-2 rounded-lg inline-block">
+                <div className="bg-orange-500 text-white font-bold text-xl px-3 py-2 rounded-lg inline-block hover:bg-[#d64b00]">
                     {score}
                 </div>
             )}

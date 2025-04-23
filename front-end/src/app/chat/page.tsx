@@ -1,4 +1,8 @@
+"use client"
+
+import { useState } from "react";
 import SearchInputLong from "@/components/SearchInputLong";
+import SearchHistoryLong from "@/components/SearchHistoryLong";
 import ProductCard from "@/components/ProductCard";
 import OtherProduct from "@/components/OtherProduct";
 import ReviewCard from "@/components/ReviewCard";
@@ -8,6 +12,8 @@ import SectionTitle from "@/components/SectionTitle";
 import ScoreAndTitle from "@/components/ScoreAndTitle";
 
 export default function Home() {
+    const [isFocused, setIsFocused] = useState(false);
+    const [inputValue, setInputValue] = useState("");
     return (
         <main className="flex justify-center items-center flex-col h-screen bg-[#F7F0EA] backdrop-blur-md">
             {/* Header */}
@@ -47,7 +53,7 @@ export default function Home() {
                         productLink="https://example.com/product1"
                     />
                     <ProductCard
-                        image="/iphone.png"
+                        image="/iphonebiru.jpg"
                         price="9,499 juta"
                         storeName="Cellular World Official Store"
                         productLink="https://example.com/product1"
@@ -59,7 +65,7 @@ export default function Home() {
                         productLink="https://example.com/product1"
                     />
                     <ProductCard
-                        image="/iphone.png"
+                        image="/iphonebiru.jpg"
                         price="9,499 juta"
                         storeName="Cellular World Official Store"
                         productLink="https://example.com/product1"
@@ -88,9 +94,23 @@ export default function Home() {
             </div>
 
             {/* Search Input */}
-            <div className="fixed bottom-10 w-full z-[5] bg-transparent flex justify-center px-4 md:px-8 lg:px-1 lg:pr-[13px] backdrop-blur-lg">
-                <SearchInputLong />
+            <div className="relative w-full">
+                {/* Search History */}
+                {isFocused && (
+                    <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 w-full z-[10] px-4 md:px-8 lg:px-1">
+                        <SearchHistoryLong setIsFocused={setIsFocused} setInputValue={setInputValue} />
+                    </div>
+                )}
+
+                {/* Search Input Long */}
+                <div className="fixed bottom-10 w-full z-[15] bg-transparent flex justify-center px-4 md:px-8 lg:px-1 lg:pr-[13px] backdrop-blur-lg">
+                    <SearchInputLong
+                        setIsFocused={setIsFocused}
+                        inputValue={inputValue}
+                        setInputValue={setInputValue} />
+                </div>
             </div>
+
 
             <footer className="fixed bottom-3 text-xs text-[#a3a3a3]">
                 <p>Shop smarter, buy better with EcomSense!</p>

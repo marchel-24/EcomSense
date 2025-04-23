@@ -19,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({ hideLogo = false }) => {
             alt="EcomSense Logo"
             width={400}
             height={140}
-            className="w-[400px] md:w-[400px] lg:w-[400px] xl:w-[400px] transition-all duration-300"
+            className="w-[400px] md:w-[400px] lg:w-[400px] xl:w-[400px] transition-all duration-300 transform hover:scale-105"
           />
         </div>
       )}
