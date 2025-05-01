@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import GoogleLoginButton from "./GoogleLoginButton";
+import GoogleLogin from "react-google-login";
 
 interface AuthPopUpProps {
   onClose: () => void;
@@ -26,12 +28,13 @@ const AuthPopUp: React.FC<AuthPopUpProps> = ({ onClose }) => {
       </h2>
 
       {/* Google Button */}
-      <button className="mt-4 flex items-center justify-center w-full bg-[#F25500] text-white font-bold rounded-full py-2 transition duration-200 transform hover:bg-[#d64b00] hover:shadow-lg hover:scale-105">
+      {/* <button className="mt-4 flex items-center justify-center w-full bg-[#F25500] text-white font-bold rounded-full py-2 transition duration-200 transform hover:bg-[#d64b00] hover:shadow-lg hover:scale-105">
         <div className="bg-white flex items-center justify-center rounded-full w-7 h-7 mr-2">
           <FcGoogle className="w-5 h-5" />
         </div>
         {isSignUp ? "Sign up with Google" : "Sign in with Google"}
-      </button>
+      </button> */}
+      <GoogleLoginButton isSignUp={isSignUp}/>
 
       {/* Toggle between Sign In / Sign Up */}
       <p className="mt-4 text-gray-500">
