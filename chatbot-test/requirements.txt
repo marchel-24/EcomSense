@@ -1,0 +1,6 @@
+selenium
+webdriver-manager
+pandas
+# googletrans==4.0.0rc1
+# textblob
+azure-ai-textanalytics
