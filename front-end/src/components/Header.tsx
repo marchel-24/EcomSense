@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import GuideButton from "@/components/GuideButton";
 import ProfileButton from "@/components/ProfileButton";
 
@@ -7,6 +8,17 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ hideLogo = false }) => {
+
+  const [name, setName] = useState<string>("");
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setName(user.name); // ✅ Ambil nama dari hasil login
+    }
+  }, []);
+
   return (
     <header className="max-w-[1080px] w-full flex justify-between items-center px-4 sm:px-5 md:px-6 bg-transparent gap-7">
       <GuideButton />
@@ -24,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({ hideLogo = false }) => {
         </div>
       )}
 
-      <ProfileButton name="" profilePic="/maudy-ayunda.png" />
+      <ProfileButton name={name} profilePic="/maudy-ayunda.png" />
     </header>
   );
 };

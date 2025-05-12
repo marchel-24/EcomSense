@@ -1,120 +1,148 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchInputLong from "@/components/SearchInputLong";
 import SearchHistoryLong from "@/components/SearchHistoryLong";
 import ProductCard from "@/components/ProductCard";
-import OtherProduct from "@/components/OtherProduct";
 import ReviewCard from "@/components/ReviewCard";
 import BubbleText from "@/components/BubbleText";
 import Header from "@/components/Header";
 import SectionTitle from "@/components/SectionTitle";
 import ScoreAndTitle from "@/components/ScoreAndTitle";
 
+// 🔶 Interface untuk response API
+interface Produk {
+  Gambar: string;
+  Harga: string;
+  Link: string;
+  "Nama Produk": string;
+  Toko: string;
+}
+
+interface Ulasan {
+  Ulasan: string;
+  Username: string;
+}
+
+interface ChatbotResponse {
+  Kesimpulan: string;
+  Produk: Produk[];
+  "Rata-rata Rating": number;
+  Ulasan: Ulasan[];
+}
+
 export default function Home() {
-    const [isFocused, setIsFocused] = useState(false);
-    const [inputValue, setInputValue] = useState("");
-    return (
-        <main className="flex justify-center items-center flex-col h-screen bg-[#F7F0EA] backdrop-blur-md">
-            {/* Header */}
-            <div className="fixed top-5 left-0 w-full z-10 bg-transparent flex justify-center ">
-                <Header hideLogo={false} />
-            </div>
+  const [isFocused, setIsFocused] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [chatbotResponse, setChatbotResponse] = useState<ChatbotResponse | null>(null);
 
-            {/* Konten utama yang bisa di-scroll */}
-            <div className="flex-1 overflow-auto mt-[80px] mb-[80px] flex flex-col items-center w-full mx-auto p-8 pl-11 lg:pl-8 gap-4">
+  // useEffect(() => {
+  //   if (!inputValue) return;
 
-                {/* BubbleText */}
-                <div className="w-full flex justify-center mb-6">
-                    <BubbleText text="Iphone 13" />
-                </div>
+  //   const timeout = setTimeout(() => {
+  //     const fetchData = async () => {
+  //       try {
+  //           const url = `http://localhost:8000/chatbot?q=${encodeURIComponent(inputValue)}`;
+  //           console.log("🔍 Requesting API:", url);
+  //         const res = await fetch(url);
+  //         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+  //         const data = await res.json();
+  //         console.log("✅ Data received:", data);
+  //         setChatbotResponse(data);
+  //       } catch (err) {
+  //         console.error("🚨 Gagal fetch API:", err);
+  //       }
+  //     };
 
-                {/* Review Section */}
-                <ScoreAndTitle
-                    title="Worth To Buy!!!"
-                    description="iPhone 13 gets great reviews! Check out their thoughts!"
-                    score="8.5/10"  // Score hanya ada di review section
-                />
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full lg:w-[880px]">
-                    <ReviewCard username="biutifafp" review="MasyaAllahhh cantik bangettt ya Allahhh warnanya. Rasanya kayak mimpi bisa kebeliii hp ini 🥺🥺🥺🥺" />
-                    <ReviewCard username="fird4_" review="Warnanya beneran lebih cakep dari yang di foto, nggak nyesel belii." />
-                    <ReviewCard username="safrinaaa" review="Packingnya rapi dan aman. Barang sesuai deskripsi!" />
-                    <ReviewCard username="rezky.m" review="Waduhhh, beli ini bikin hati bahagiaaa! Sumpah recommended banget deh!" />
-                </div>
+  //     fetchData();
+  //   }, 500); // debounce 500ms
 
+  //   return () => clearTimeout(timeout);
+  // }, [inputValue]);
 
-                {/* Product Section */}
-                <SectionTitle title="Where To Buy?" description="Here are the best places to buy iPhone 13 from trusted stores. Tap to see more!" />
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <ProductCard
-                        image="/iphone.png"
-                        price="9,499 juta"
-                        storeName="Cellular World Official Store"
-                        productLink="https://example.com/product1"
-                    />
-                    <ProductCard
-                        image="/iphonebiru.jpg"
-                        price="9,499 juta"
-                        storeName="Cellular World Official Store"
-                        productLink="https://example.com/product1"
-                    />
-                    <ProductCard
-                        image="/iphone.png"
-                        price="9,499 juta"
-                        storeName="Cellular World Official Store"
-                        productLink="https://example.com/product1"
-                    />
-                    <ProductCard
-                        image="/iphonebiru.jpg"
-                        price="9,499 juta"
-                        storeName="Cellular World Official Store"
-                        productLink="https://example.com/product1"
-                    />
-                </div>
+  const handleSubmit = async () => {
+    if (!inputValue) return;
+  
+    try {
+      const url = `http://localhost:8000/chatbot?q=${encodeURIComponent(inputValue)}`;
+      console.log("🔍 Requesting:", url);
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+      const data = await res.json();
+      console.log("✅ Data received:", data);
+      setChatbotResponse(data);
+    } catch (err) {
+      console.error("🚨 Gagal fetch:", err);
+    }
+  };
+  
 
-                {/* Other Products Section */}
-                <SectionTitle title="Here's Similar Product For You" description="Let's explore similar product and see what people are saying!" />
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full lg:w-[900px]">
-                    <OtherProduct
-                        image="/iphonebiru.jpg"
-                        productName="iPhone 13"
-                        price="9-10 juta"
-                    />
-                    <OtherProduct
-                        image="/iphonebiru.jpg"
-                        productName="iPhone 13"
-                        price="9-10 juta"
-                    />
-                    <OtherProduct
-                        image="/iphonebiru.jpg"
-                        productName="iPhone 13"
-                        price="9-10 juta"
-                    />
-                </div>
-            </div>
+  return (
+    <main className="flex justify-center items-center flex-col h-screen bg-[#F7F0EA] backdrop-blur-md">
+      {/* Header */}
+      <div className="fixed top-5 left-0 w-full z-10 bg-transparent flex justify-center">
+        <Header hideLogo={false} />
+      </div>
 
-            {/* Search Input */}
-            <div className="relative w-full">
-                {/* Search History */}
-                {isFocused && (
-                    <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 w-full z-[10] px-4 md:px-8 lg:px-1">
-                        <SearchHistoryLong setIsFocused={setIsFocused} setInputValue={setInputValue} />
-                    </div>
-                )}
+      {/* Konten Utama */}
+      <div className="flex-1 overflow-auto mt-[80px] mb-[80px] flex flex-col items-center w-full mx-auto p-8 pl-11 lg:pl-8 gap-4">
+        <div className="w-full flex justify-center mb-6">
+          <BubbleText text={inputValue || "-"} />
+        </div>
 
-                {/* Search Input Long */}
-                <div className="fixed bottom-10 w-full z-[15] bg-transparent flex justify-center px-4 md:px-8 lg:px-1 lg:pr-[13px] backdrop-blur-lg">
-                    <SearchInputLong
-                        setIsFocused={setIsFocused}
-                        inputValue={inputValue}
-                        setInputValue={setInputValue} />
-                </div>
-            </div>
+        {chatbotResponse && (
+          <ScoreAndTitle
+            title={chatbotResponse.Kesimpulan}
+            description="Here's the summary based on user reviews"
+            score={`${chatbotResponse["Rata-rata Rating"].toFixed(1)}/10`}
+          />
+        )}
 
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full lg:w-[880px]">
+          {chatbotResponse?.Ulasan?.slice(0, 4).map((item, index) => (
+            <ReviewCard key={index} username={item.Username} review={item.Ulasan} />
+          ))}
+        </div>
 
-            <footer className="fixed bottom-3 text-xs text-[#a3a3a3]">
-                <p>Shop smarter, buy better with EcomSense!</p>
-            </footer>
-        </main>
-    );
+        <SectionTitle
+          title="Where To Buy?"
+          description="Here are the best places to buy from trusted stores. Tap to see more!"
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {chatbotResponse?.Produk?.map((product, index) => (
+            <ProductCard
+              key={index}
+              image={product.Gambar}
+              price={product.Harga}
+              storeName={product.Toko}
+              productLink={product.Link}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Search Input */}
+      <div className="relative w-full">
+        {/* {isFocused && (
+          <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 w-full z-[10] px-4 md:px-8 lg:px-1">
+            <SearchHistoryLong setIsFocused={setIsFocused} setInputValue={setInputValue}
+ />
+          </div>
+        )} */}
+
+        <div className="fixed bottom-10 w-full z-[15] bg-transparent flex justify-center px-4 md:px-8 lg:px-1 lg:pr-[13px] backdrop-blur-lg">
+          <SearchInputLong
+            setIsFocused={setIsFocused}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            onEnter={handleSubmit}
+          />
+        </div>
+      </div>
+
+      <footer className="fixed bottom-3 text-xs text-[#a3a3a3]">
+        <p>Shop smarter, buy better with EcomSense!</p>
+      </footer>
+    </main>
+  );
 }

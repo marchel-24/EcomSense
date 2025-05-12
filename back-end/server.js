@@ -1,38 +1,28 @@
-// require('dotenv').config();
-// const express = require('express');
-// const cors = require('cors');
-// const accountRoutes = require('./routes/accountRoutes');
-// const chatRoutes = require('./routes/chatRoutes')
-
-// const app = express();
-
-// app.use(cors());
-// app.use(express.json());
-
-// // Routes
-// app.use('/accounts', accountRoutes);
-// app.use('/chat', chatRoutes);
-
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`);
-// });
-
-// back-end/server.js
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
 const app = express();
-require('dotenv').config();
-const accountRoutes = require('./routes/accountRoutes');
-// const chatRoutes = require('./routes/chatRoutes');
-// const authRoutes = require('./routes/auth');
 
+// ✅ Tambahkan header CORS manual di sini (poin 4)
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // alamat frontend kamu
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  next();
+});
+
+// ✅ Middleware CORS resmi juga bisa tetap aktif
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
+
+// ✅ Middleware body parser
 app.use(express.json());
 
-app.use('/api/accounts', accountRoutes);
-// app.use('/api/chats', chatRoutes);
-// app.use('/api/auth', authRoutes);
+// ✅ Route kamu
+const authRoutes = require("./routes/authRoutes");
+app.use("/api", authRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// ✅ Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

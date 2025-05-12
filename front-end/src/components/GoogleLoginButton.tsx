@@ -1,62 +1,80 @@
 "use client";
-import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
-import { FcGoogle } from "react-icons/fc";
+import { useEffect } from "react";
 
-const clientID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
+// Tambahkan deklarasi global untuk window.google
+declare global {
+  interface Window {
+    google: {
+      accounts: {
+        id: {
+          initialize: (options: {
+            client_id: string;
+            callback: (response: GoogleCredentialResponse) => void;
+          }) => void;
+          renderButton: (
+            parent: HTMLElement,
+            options: {
+              theme?: string;
+              size?: string;
+              width?: number;
+              text?: string;
+              shape?: string;
+              logo_alignment?: string;
+            }
+          ) => void;
+        };
+      };
+    };
+  }
+
+  interface GoogleCredentialResponse {
+    credential: string;
+    select_by: string;
+    clientId: string;
+  }
+}
 
 const GoogleLoginButton = ({ isSignUp }: { isSignUp: boolean }) => {
-    const onSuccess = async (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-        if ('profileObj' in res) {
-          const profile = res.profileObj;
-      
-          // Kirim ke backend
-          await fetch("http://localhost:5000/api/auth/google", {
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.google) return;
+
+    // Inisialisasi akun Google
+    window.google.accounts.id.initialize({
+      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+      callback: async (response) => {
+        const token = response.credential;
+        console.log("Token dari Google:", token);
+
+        try {
+          const res = await fetch("http://localhost:5000/api/auth/google", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(profile),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token }),
           });
-      
-          console.log("Login Success", profile);
+
+          const data = await res.json();
+          console.log("Login sukses:", data);
+          localStorage.setItem("user", JSON.stringify(data.user));
+        } catch (err) {
+          console.error("Gagal login:", err);
         }
-      };
-      
-      
-//   const onSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-//     // if ("profileObj" in res) {
-//     //   console.log("Login Success", res.profileObj);
-//     // }
-    
-//   };
+      },
+    });
 
+    // Render tombol login Google di elemen dengan ID ini
+    window.google.accounts.id.renderButton(
+      document.getElementById("google-button")!,
+      {
+        theme: "outline",
+        size: "large",
+        shape: "pill",
+        logo_alignment: "left",
+        text: isSignUp ? "signup_with" : "signin_with",
+      }
+    );
+  }, [isSignUp]);
 
-  const onFailure = (res: any) => {
-    console.log("Login Failed", res);
-  };
-
-  return (
-    <GoogleLogin
-      clientId={clientID}
-      buttonText={isSignUp ? "Sign up with Google" : "Sign in with Google"}
-      onSuccess={onSuccess}
-      onFailure={onFailure}
-      cookiePolicy={'single_host_origin'}
-      isSignedIn={true}
-      render={renderProps => (
-        <button
-          onClick={renderProps.onClick}
-          disabled={renderProps.disabled}
-          className="mt-4 flex items-center justify-center w-full bg-[#F25500] text-white font-bold rounded-full py-2 transition duration-200 transform hover:bg-[#d64b00] hover:shadow-lg hover:scale-105"
-        >
-          <div className="bg-white flex items-center justify-center rounded-full w-7 h-7 mr-2">
-            <FcGoogle className="w-5 h-5" />
-          </div>
-          {isSignUp ? "Sign up with Google" : "Sign in with Google"}
-        </button>
-      )}
-    />
-  );
+  return <div id="google-button" className="flex justify-center mt-4" />;
 };
 
 export default GoogleLoginButton;
