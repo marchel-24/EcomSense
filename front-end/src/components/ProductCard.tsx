@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { MdOutlineFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
 
 interface ProductCardProps {
@@ -8,15 +8,67 @@ interface ProductCardProps {
   price: string;
   storeName: string;
   productLink: string;
-  isLoggedIn: boolean; // ← Tambahkan props ini
 }
 
-const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLink, isLoggedIn }) => {
+const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLink}) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
+  // ✅ Cek apakah produk sudah difavoritkan saat komponen dimuat
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return;
+
+    const user = JSON.parse(storedUser);
+    const userId = user.id;
+
+    fetch(`http://localhost:5000/api/favorites?user_id=${userId}`)
+      .then((res) => res.json())
+      .then((favorites) => {
+        const found = favorites.some(
+          (item: { product_url: string }) => item.product_url === productLink
+        );
+        setIsFavorite(found);
+      })
+      .catch((err) => {
+        console.error("Gagal mengecek favorit:", err);
+      });
+  }, [productLink]);
+
+  // ✅ Fungsi simpan favorit ke backend
+  const handleFavorite = async () => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      alert("Silakan login terlebih dahulu.");
+      return;
+    }
+  
+    const user = JSON.parse(storedUser);
+    const userId = user.id;
+  
+    try {
+      const res = await fetch("http://localhost:5000/api/favorites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: userId,
+          product_url: productLink,
+          product_price: price,     
+          product_image: image,          
+          store_name: storeName          
+        }),
+      });
+  
+      if (res.ok) {
+        setIsFavorite(true);
+        console.log("Produk ditambahkan ke favorit.");
+      } else {
+        console.error("Gagal menyimpan favorit");
+      }
+    } catch (err) {
+      console.error("Error saat menyimpan favorit:", err);
+    }
   };
+  
 
   return (
     <div className="w-full max-w-[160px] sm:max-w-[180px] md:max-w-[200px] h-auto bg-white rounded-xl shadow-md p-2 flex flex-col justify-between border border-gray-300 mx-auto transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
@@ -24,19 +76,17 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
       <div className="relative w-full h-[140px] sm:h-[160px] md:h-[180px] border border-gray-300 rounded-lg overflow-hidden">
         <img src={image} alt="Product" className="w-full h-full object-cover rounded-lg" />
 
-        {/* Favorite Icon → hanya tampil jika login */}
-        {isLoggedIn && (
-          <button
-            onClick={toggleFavorite}
-            className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md transition-transform duration-200 hover:scale-110"
-          >
-            {isFavorite ? (
-              <MdOutlineFavorite className="text-orange-500 w-5 h-5" />
-            ) : (
-              <MdOutlineFavoriteBorder className="text-orange-500 w-5 h-5" />
-            )}
-          </button>
-        )}
+        {/* Favorite Icon */}
+        <button
+          onClick={handleFavorite}
+          className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md transition-transform duration-200 hover:scale-110"
+        >
+          {isFavorite ? (
+            <MdOutlineFavorite className="text-orange-500 w-5 h-5" />
+          ) : (
+            <MdOutlineFavoriteBorder className="text-orange-500 w-5 h-5" />
+          )}
+        </button>
       </div>
 
       {/* Product Info */}
@@ -45,9 +95,11 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
         <p className="text-xs md:text-sm text-gray-500 truncate">By {storeName}</p>
 
         {/* See More */}
-        <a 
-          href={productLink} 
+        <a
+          href={productLink}
           className="text-xs md:text-sm text-orange-500 underline font-medium mt-2 block text-right hover:text-orange-700"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           See More
         </a>

@@ -33,8 +33,15 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ name, onClose, onOpenAuth }) 
             <li
               className="flex items-center px-4 py-2 text-white hover:bg-[#e27847] cursor-pointer"
               onClick={() => {
-                router.push("/"); // Redirect ke halaman utama
+                if (typeof window !== "undefined") {
+                  localStorage.removeItem("user");           
+                  if (window.google?.accounts?.id) {
+                    window.google.accounts.id.disableAutoSelect();
+                  }
+                }
                 onClose();
+                router.push("/");
+                window.location.reload();
               }}
             >
               <FaSignOutAlt className="mr-2 text-white" />

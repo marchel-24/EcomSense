@@ -1,39 +1,6 @@
 "use client";
 import { useEffect } from "react";
 
-// Tambahkan deklarasi global untuk window.google
-declare global {
-  interface Window {
-    google: {
-      accounts: {
-        id: {
-          initialize: (options: {
-            client_id: string;
-            callback: (response: GoogleCredentialResponse) => void;
-          }) => void;
-          renderButton: (
-            parent: HTMLElement,
-            options: {
-              theme?: string;
-              size?: string;
-              width?: number;
-              text?: string;
-              shape?: string;
-              logo_alignment?: string;
-            }
-          ) => void;
-        };
-      };
-    };
-  }
-
-  interface GoogleCredentialResponse {
-    credential: string;
-    select_by: string;
-    clientId: string;
-  }
-}
-
 const GoogleLoginButton = ({ isSignUp }: { isSignUp: boolean }) => {
   useEffect(() => {
     if (typeof window === "undefined" || !window.google) return;
