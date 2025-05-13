@@ -8,9 +8,10 @@ interface ProductCardProps {
   price: string;
   storeName: string;
   productLink: string;
+  isLoggedIn: boolean; // ← Tambahkan props ini
 }
 
-const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLink }) => {
+const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLink, isLoggedIn }) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleFavorite = () => {
@@ -23,17 +24,19 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
       <div className="relative w-full h-[140px] sm:h-[160px] md:h-[180px] border border-gray-300 rounded-lg overflow-hidden">
         <img src={image} alt="Product" className="w-full h-full object-cover rounded-lg" />
 
-        {/* Favorite Icon */}
-        <button
-          onClick={toggleFavorite}
-          className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md transition-transform duration-200 hover:scale-110"
-        >
-          {isFavorite ? (
-            <MdOutlineFavorite className="text-orange-500 w-5 h-5" />
-          ) : (
-            <MdOutlineFavoriteBorder className="text-orange-500 w-5 h-5" />
-          )}
-        </button>
+        {/* Favorite Icon → hanya tampil jika login */}
+        {isLoggedIn && (
+          <button
+            onClick={toggleFavorite}
+            className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md transition-transform duration-200 hover:scale-110"
+          >
+            {isFavorite ? (
+              <MdOutlineFavorite className="text-orange-500 w-5 h-5" />
+            ) : (
+              <MdOutlineFavoriteBorder className="text-orange-500 w-5 h-5" />
+            )}
+          </button>
+        )}
       </div>
 
       {/* Product Info */}
