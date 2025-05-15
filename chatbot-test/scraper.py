@@ -23,6 +23,16 @@ def scrape_tokopedia(query):
     driver.get(url)
     time.sleep(5)
 
+    try:
+        not_found_xpath = "//*[contains(text(), 'produk nggak ditemukan') or contains(text(), 'Produk tidak ditemukan') or contains(text(), 'Oops')]"
+        not_found_element = driver.find_element(By.XPATH, not_found_xpath)
+        print(f"Tidak ada produk untuk query: '{query}'")
+        driver.quit()
+        return []  # Jangan ambil produk rekomendasi
+    except NoSuchElementException:
+        pass  # Aman, produk valid, lanjut scraping
+    
+
     results = []
 
     cards = driver.find_elements(By.CSS_SELECTOR, 'a[data-theme="default"]')[:4]  # Ambil 4 produk

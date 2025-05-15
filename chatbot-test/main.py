@@ -1,39 +1,61 @@
+from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
 from scraper import scrape_tokopedia, ambil_ulasan_dari_link
 from sentiment import analisis_ulasan
+# import random
 
-def chatbot():
-    print("=== Selamat datang di EcomSense ===\n")
-    
-    while True:
-        query = input("Masukkan nama produk (atau ketik 'exit' untuk keluar): ").strip()
-        if query.lower() == 'exit':
-            print("Sampai jumpa!")
-            break
+app = FastAPI()
 
-        print("\nMencari produk dan ulasan... Mohon tunggu...\n")
-        produk_list = scrape_tokopedia(query)
+# ✅ Izinkan akses dari semua origin untuk pengujian lokal
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Ganti dengan ['http://localhost:3000'] untuk keamanan
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-        all_reviews = []
-        for item in produk_list:
-            ulasan = ambil_ulasan_dari_link(item['Link'], item['Nama Produk'])
-            all_reviews.extend([u['Ulasan'] for u in ulasan])
+@app.get("/chatbot")
+def chatbot(q: str = Query(...)):
+    produk_list = scrape_tokopedia(q)
 
-        if not all_reviews:
-            print("Tidak ditemukan ulasan. Coba produk lain.\n")
-            continue
-        
-        print("\n=== PRODUK YANG DITEMUKAN ===")
-        for i, item in enumerate(produk_list, start=1):
-            print(f"\nProduk {i}")
-            print(f" - Nama : {item['Nama Produk']}")
-            print(f" - Harga: {item['Harga']}")
-            print(f" - Toko : {item['Toko']}")
-            print(f" - Gambar: {item['Gambar']}")
-            print(f" - Link  : {item['Link']}")
+    if not produk_list:
+        return {
+            "Kesimpulan": "NO DATA",
+            "Produk": [],
+            "Rata-rata Rating": 0,
+            "Ulasan": []
+        }
 
-        print(f"\n{len(all_reviews)} ulasan ditemukan. Menganalisis sentimen...\n")
-        analisis_ulasan(all_reviews)
-        print("\n--- Selesai ---\n")
+    all_reviews = []
+    # Looping ambil ulasan dari semua produk
+    for produk in produk_list:
+        ulasan = ambil_ulasan_dari_link(produk['Link'], produk['Nama Produk'])
+        all_reviews.extend(ulasan)
 
-if __name__ == "__main__":
-    chatbot()
+    # Jika tidak ada ulasan sama sekali
+    if not all_reviews:
+        return {
+            "Kesimpulan": "NO DATA",
+            "Produk": produk_list,
+            "Rata-rata Rating": 0,
+            "Ulasan": []
+        }
+
+    # Mapping data ulasan sesuai format output
+    ulasan_output = [
+        {"Username": u["Username"], "Ulasan": u["Ulasan"]}
+        for u in all_reviews
+    ]
+
+    # Analisis ulasan untuk rata-rata rating dan kesimpulan
+    avg_rating, verdict = analisis_ulasan(all_reviews, silent=True)
+
+    response = {
+        "Kesimpulan": verdict,
+        "Produk": produk_list,
+        "Rata-rata Rating": round(avg_rating, 2),
+        "Ulasan": ulasan_output[:20],  # ambil max 20 ulasan seperti contoh
+    }
+
+    return response

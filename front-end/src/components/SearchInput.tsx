@@ -11,10 +11,12 @@ interface SearchInputProps {
 const SearchInput: FC<SearchInputProps> = ({ setIsFocused, inputValue, setInputValue }) => {
   const router = useRouter(); // Initialize useRouter
 
-  // Fungsi untuk mengarahkan ke halaman chat
   const handleSearchClick = () => {
-    router.push("/chat"); // Menggunakan router.push() untuk navigasi
-  };
+    if (inputValue.trim() !== "") {
+      router.push(`/chat?q=${encodeURIComponent(inputValue)}`);
+    }
+  }; 
+
 
   return (
     <div 
@@ -27,6 +29,8 @@ const SearchInput: FC<SearchInputProps> = ({ setIsFocused, inputValue, setInputV
         onFocus={() => setIsFocused(true)}
         onBlur={() => setTimeout(() => setIsFocused(false), 200)}
         onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={(e) => {if (e.key === "Enter") handleSearchClick();}}
+
         className="pl-[10px] pr-[50px] w-full bg-transparent outline-none text-[#ADCDB9] font-bold placeholder-[#ADCDB9] 
           text-sm sm:text-base md:text-lg min-h-[35px] sm:min-h-[40px] md:min-h-[45px] transition-all duration-300"
       />

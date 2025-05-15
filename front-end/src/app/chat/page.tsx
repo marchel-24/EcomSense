@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import SearchInputLong from "@/components/SearchInputLong";
 import SearchHistoryLong from "@/components/SearchHistoryLong";
 import ProductCard from "@/components/ProductCard";
@@ -9,6 +10,7 @@ import BubbleText from "@/components/BubbleText";
 import Header from "@/components/Header";
 import SectionTitle from "@/components/SectionTitle";
 import ScoreAndTitle from "@/components/ScoreAndTitle";
+import { PiSmileySadLight } from "react-icons/pi";
 
 // 🔶 Interface untuk response API
 interface Produk {
@@ -31,118 +33,175 @@ interface ChatbotResponse {
   Ulasan: Ulasan[];
 }
 
+const ErrorMessage: React.FC<{ message: string }> = ({ message }) => (
+  <div className="flex flex-col w-full max-w-[1080px] items-center justify-center gap-2 mt-2 mb-1 text-[#007F33] border border-[#007F33] rounded-md p-4">
+    <PiSmileySadLight size={48} />
+    <p className="font-semibold text-center max-w-xs">{message}</p>
+  </div>
+);
+
 export default function Home() {
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q") || "";
+  const router = useRouter();
+
+  const [conversations, setConversations] = useState<
+    { query: string; response: ChatbotResponse | null; isLoading: boolean }[]
+  >([]);
+  const [inputValue, setInputValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const [inputValue, setInputValue] = useState("");
   const [chatbotResponse, setChatbotResponse] = useState<ChatbotResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const hasFetched = useRef(false);
 
-  // useEffect(() => {
-  //   if (!inputValue) return;
+  const seenQueries = useRef<Set<string>>(new Set());
 
-  //   const timeout = setTimeout(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //           const url = `http://localhost:8000/chatbot?q=${encodeURIComponent(inputValue)}`;
-  //           console.log("🔍 Requesting API:", url);
-  //         const res = await fetch(url);
-  //         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-  //         const data = await res.json();
-  //         console.log("✅ Data received:", data);
-  //         setChatbotResponse(data);
-  //       } catch (err) {
-  //         console.error("🚨 Gagal fetch API:", err);
-  //       }
-  //     };
+  const fetchChatbotData = async (newQuery: string, force = false) => {
+    if (!newQuery) return;
 
-  //     fetchData();
-  //   }, 500); // debounce 500ms
+    if (!force && seenQueries.current.has(newQuery)) return;
+    if (!seenQueries.current.has(newQuery)) seenQueries.current.add(newQuery);
 
-  //   return () => clearTimeout(timeout);
-  // }, [inputValue]);
+    setConversations((prev) => [
+      ...prev,
+      { query: newQuery, response: null, isLoading: true },
+    ]);
 
-  const handleSubmit = async () => {
-    if (!inputValue) return;
-  
     try {
-      const url = `http://localhost:8000/chatbot?q=${encodeURIComponent(inputValue)}`;
-      console.log("🔍 Requesting:", url);
+      const url = `http://localhost:8000/chatbot?q=${encodeURIComponent(newQuery)}`;
       const res = await fetch(url);
-      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
       const data = await res.json();
-      console.log("✅ Data received:", data);
-      setChatbotResponse(data);
+
+      setConversations((prev) =>
+        prev.map((item) =>
+          item.query === newQuery && item.response === null
+            ? { ...item, response: data, isLoading: false }
+            : item
+        )
+      );
     } catch (err) {
-      console.error("🚨 Gagal fetch:", err);
+      console.error("Fetch error:", err);
     }
   };
-  
+
+
+  // ✅ useEffect untuk fetch saat pertama kali load berdasarkan URL
+  useEffect(() => {
+    if (query) {
+      fetchChatbotData(query); // force = false (default)
+    }
+  }, [query]);
 
   return (
-    <main className="flex justify-center items-center flex-col h-screen bg-[#F7F0EA] backdrop-blur-md">
-      {/* Header */}
+    <main className="flex flex-col h-screen bg-[#F7F0EA]">
+      {/* Header tetap di atas */}
       <div className="fixed top-5 left-0 w-full z-10 bg-transparent flex justify-center">
         <Header hideLogo={false} />
       </div>
 
-      {/* Konten Utama */}
-      <div className="flex-1 overflow-auto mt-[80px] mb-[80px] flex flex-col items-center w-full mx-auto p-8 pl-11 lg:pl-8 gap-4">
-        <div className="w-full flex justify-center mb-6">
-          <BubbleText text={inputValue || "-"} />
-        </div>
+      {/* Konten Utama: scrollable, termasuk bubble */}
+      <div className="flex-1 mt-[80px] mb-[90px] overflow-y-auto px-8">
+        <div className="flex flex-col items-center gap-4">
 
-        {chatbotResponse && (
-          <ScoreAndTitle
-            title={chatbotResponse.Kesimpulan}
-            description="Here's the summary based on user reviews"
-            score={`${chatbotResponse["Rata-rata Rating"].toFixed(1)}/10`}
-          />
-        )}
+          {conversations.map((conv, idx) => (
+            <div key={idx} className="w-full flex flex-col items-center gap-4 mt-5">
+              <BubbleText text={conv.query} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full lg:w-[880px]">
-          {chatbotResponse?.Ulasan?.slice(0, 4).map((item, index) => (
-            <ReviewCard key={index} username={item.Username} review={item.Ulasan} />
+              {conv.isLoading && (
+                <p className="text-sm text-[#007F33] font-bold animate-pulse mb-5">Loading...</p>
+              )}
+
+              {!conv.isLoading && conv.response && (
+                <>
+                  {/* CASE 1: Produk list kosong */}
+                  {conv.response.Produk.length === 0 && (
+                    <ErrorMessage message="Data not found or server error, please try another product or try again later." />
+                  )}
+
+                  {/* CASE 2: Produk ada tapi ulasan kosong */}
+                  {conv.response.Produk.length > 0 && conv.response.Ulasan.length === 0 && (
+                    <>
+                      <ErrorMessage message="No reviews found for this product." />
+                      <SectionTitle
+                        title="Where To Buy?"
+                        description="Here are the best places to buy from trusted stores. Tap to see more!"
+                      />
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+                        {conv.response.Produk.map((product, index) => (
+                          <ProductCard
+                            key={index}
+                            image={product.Gambar}
+                            price={product.Harga}
+                            storeName={product.Toko}
+                            productLink={product.Link}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  {/* CASE 3: Produk & ulasan ada */}
+                  {conv.response.Produk.length > 0 && conv.response.Ulasan.length > 0 && (
+                    <>
+                      <ScoreAndTitle
+                        title={conv.response.Kesimpulan}
+                        description="Here's the summary based on user reviews"
+                        score={`${conv.response['Rata-rata Rating'].toFixed(1)}/10`}
+                      />
+
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full lg:w-[880px]">
+                        {conv.response.Ulasan.slice(0, 4).map((item, index) => (
+                          <ReviewCard key={index} username={item.Username} review={item.Ulasan} />
+                        ))}
+                      </div>
+
+                      <SectionTitle
+                        title="Where To Buy?"
+                        description="Here are the best places to buy from trusted stores. Tap to see more!"
+                      />
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+                        {conv.response.Produk.map((product, index) => (
+                          <ProductCard
+                            key={index}
+                            image={product.Gambar}
+                            price={product.Harga}
+                            storeName={product.Toko}
+                            productLink={product.Link}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
           ))}
-        </div>
 
-        <SectionTitle
-          title="Where To Buy?"
-          description="Here are the best places to buy from trusted stores. Tap to see more!"
+        </div>
+      </div>
+
+      {/* Search Input tetap di bawah */}
+      <div className="fixed bottom-10 w-full z-[15] bg-transparent flex justify-center px-4 md:px-8 lg:px-1">
+        <SearchInputLong
+          setIsFocused={setIsFocused}
+          onSubmit={(newQuery: string) => {
+            if (newQuery.trim()) {
+              router.push(`/chat?q=${encodeURIComponent(newQuery)}`);
+              fetchChatbotData(newQuery, true); // force fetch every time user submits
+              setInputValue(newQuery);
+            }
+          }}
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {chatbotResponse?.Produk?.map((product, index) => (
-            <ProductCard
-              key={index}
-              image={product.Gambar}
-              price={product.Harga}
-              storeName={product.Toko}
-              productLink={product.Link}
-            />
-          ))}
-        </div>
+
       </div>
 
-      {/* Search Input */}
-      <div className="relative w-full">
-        {/* {isFocused && (
-          <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 w-full z-[10] px-4 md:px-8 lg:px-1">
-            <SearchHistoryLong setIsFocused={setIsFocused} setInputValue={setInputValue}
- />
-          </div>
-        )} */}
-
-        <div className="fixed bottom-10 w-full z-[15] bg-transparent flex justify-center px-4 md:px-8 lg:px-1 lg:pr-[13px] backdrop-blur-lg">
-          <SearchInputLong
-            setIsFocused={setIsFocused}
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-            onEnter={handleSubmit}
-          />
-        </div>
-      </div>
-
-      <footer className="fixed bottom-3 text-xs text-[#a3a3a3]">
+      {/* Footer tetap di bawah */}
+      <footer className="fixed bottom-3 w-full text-xs text-[#a3a3a3] text-center">
         <p>Shop smarter, buy better with EcomSense!</p>
       </footer>
     </main>
+
   );
 }
