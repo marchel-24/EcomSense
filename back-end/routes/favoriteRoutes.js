@@ -8,6 +8,6 @@ const {
 
 router.post("/favorites", addFavorite);
 router.get("/favorites", getFavoritesByUser);
-router.delete("/favoites", deleteFavorite);
+router.delete("/favorites", deleteFavorite);
 
 module.exports = router;

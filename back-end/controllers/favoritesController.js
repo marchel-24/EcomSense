@@ -42,6 +42,7 @@ exports.getFavoritesByUser = async (req, res) => {
 
 // ✅ Hapus produk favorit berdasarkan user_id dan product_url
 exports.deleteFavorite = async (req, res) => {
+  console.log("BODY MASUK DELETE:", req.body);
   const { user_id, product_url } = req.body;
 
   if (!user_id || !product_url) {

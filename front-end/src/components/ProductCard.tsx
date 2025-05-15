@@ -21,6 +21,11 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
     const user = JSON.parse(storedUser);
     const userId = user.id;
 
+    console.log("Unfavoriting:", {
+      user_id: userId,
+      product_url: productLink
+    });
+
     fetch(`http://localhost:5000/api/favorites?user_id=${userId}`)
       .then((res) => res.json())
       .then((favorites) => {
@@ -92,8 +97,6 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
         if (res.ok) {
           setIsFavorite(true);
           console.log("Produk ditambahkan ke favorit.");
-        } else {
-          console.error("Gagal menyimpan favorit");
         }
       } catch (err) {
         console.error("Error saat menyimpan favorit:", err);
