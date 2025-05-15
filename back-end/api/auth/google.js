@@ -1,4 +1,4 @@
-import { googleLogin } from '../../../controllers/authController.js';
+import { googleLogin } from '../../controllers/authController';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

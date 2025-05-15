@@ -1,4 +1,4 @@
-import { addFavorite, getFavoritesByUser, deleteFavorite } from '../../../controllers/favoritesController.js';
+import { addFavorite, getFavoritesByUser, deleteFavorite } from '../../controllers/favoritesController';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') return addFavorite(req, res);
