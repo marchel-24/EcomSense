@@ -68,7 +68,8 @@ export default function Home() {
     ]);
 
     try {
-      const url = `http://localhost:8000/chatbot?q=${encodeURIComponent(newQuery)}`;
+      // const url = `http://20.246.142.181/chatbot?q=${encodeURIComponent(newQuery)}`;
+      const url = `/api/chatbot?q=${encodeURIComponent(newQuery)}`;
       const res = await fetch(url);
       const data = await res.json();
 
