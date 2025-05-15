@@ -35,39 +35,72 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
   }, [productLink]);
 
   // ✅ Fungsi simpan favorit ke backend
-  const handleFavorite = async () => {
+  const toggleFavorite = async () => {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) {
       alert("Silakan login terlebih dahulu.");
       return;
     }
-  
+    
+
     const user = JSON.parse(storedUser);
     const userId = user.id;
-  
-    try {
-      const res = await fetch("http://localhost:5000/api/favorites", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: userId,
-          product_url: productLink,
-          product_price: price,     
-          product_image: image,          
-          store_name: storeName          
-        }),
-      });
-  
-      if (res.ok) {
-        setIsFavorite(true);
-        console.log("Produk ditambahkan ke favorit.");
-      } else {
-        console.error("Gagal menyimpan favorit");
+
+    console.log("Unfavoriting:", {
+      user_id: userId,
+      product_url: productLink
+    });
+
+
+    if (isFavorite) {
+      // 🔴 Jika sudah favorite → hapus dari backend
+      try {
+        const res = await fetch("http://localhost:5000/api/favorites", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: userId,
+            product_url: productLink,
+          }),
+        });
+
+        if (res.ok) {
+          setIsFavorite(false);
+          console.log("Produk dihapus dari favorit.");
+        } else {
+          const errText = await res.text();
+          console.error("Gagal menghapus favorit", errText);
+        }
+      } catch (err) {
+        console.error("Error saat menghapus favorit:", err);
       }
-    } catch (err) {
-      console.error("Error saat menyimpan favorit:", err);
+    } else {
+      // 🟢 Jika belum favorite → tambahkan
+      try {
+        const res = await fetch("http://localhost:5000/api/favorites", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: userId,
+            product_url: productLink,
+            product_price: price,
+            product_image: image,
+            store_name: storeName,
+          }),
+        });
+
+        if (res.ok) {
+          setIsFavorite(true);
+          console.log("Produk ditambahkan ke favorit.");
+        } else {
+          console.error("Gagal menyimpan favorit");
+        }
+      } catch (err) {
+        console.error("Error saat menyimpan favorit:", err);
+      }
     }
   };
+
   
 
   return (
@@ -78,7 +111,7 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
 
         {/* Favorite Icon */}
         <button
-          onClick={handleFavorite}
+          onClick={toggleFavorite}
           className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md transition-transform duration-200 hover:scale-110"
         >
           {isFavorite ? (
@@ -91,7 +124,7 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
 
       {/* Product Info */}
       <div className="mt-1">
-        <p className="text-sm md:text-base font-bold text-gray-900">Rp. {price}</p>
+        <p className="text-sm md:text-base font-bold text-gray-900">{price}</p>
         <p className="text-xs md:text-sm text-gray-500 truncate">By {storeName}</p>
 
         {/* See More */}

@@ -39,3 +39,23 @@ exports.getFavoritesByUser = async (req, res) => {
     res.status(500).json({ message: "Terjadi kesalahan server" });
   }
 };
+
+// ✅ Hapus produk favorit berdasarkan user_id dan product_url
+exports.deleteFavorite = async (req, res) => {
+  const { user_id, product_url } = req.body;
+
+  if (!user_id || !product_url) {
+    return res.status(400).json({ message: "Data tidak lengkap" });
+  }
+
+  try {
+    await db.query(
+      "DELETE FROM favorites WHERE user_id = $1 AND product_url = $2",
+      [user_id, product_url]
+    );
+    res.json({ message: "Favorit berhasil dihapus" });
+  } catch (err) {
+    console.error("Gagal menghapus favorit:", err);
+    res.status(500).json({ message: "Terjadi kesalahan server" });
+  }
+};

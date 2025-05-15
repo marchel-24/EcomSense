@@ -32,9 +32,9 @@ export default function FavoritePage() {
       .then((data) => {
         const enriched = data.map((item: FavoriteProduct) => ({
           ...item,
-          image: item.product_image,       // ✅ perbaikan
-          price: item.product_price,       // ✅ perbaikan
-          storeName: item.store_name,      // ✅ perbaikan
+          image: item.product_image,     
+          price: item.product_price,     
+          storeName: item.store_name,    
         }));
         setFavoriteProducts(enriched);
         console.log("DATA FAVORIT:", data);

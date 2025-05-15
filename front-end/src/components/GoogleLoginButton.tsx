@@ -22,6 +22,8 @@ const GoogleLoginButton = ({ isSignUp }: { isSignUp: boolean }) => {
           const data = await res.json();
           console.log("Login sukses:", data);
           localStorage.setItem("user", JSON.stringify(data.user));
+          window.location.reload();
+
         } catch (err) {
           console.error("Gagal login:", err);
         }

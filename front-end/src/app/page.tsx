@@ -35,11 +35,11 @@ export default function Home() {
         <SearchInput setIsFocused={setIsFocused} inputValue={inputValue} setInputValue={setInputValue} />
 
         {/* Search History */}
-        {/* {isFocused && (
+        {isFocused && (
           <div className="absolute justify-center top-full mt-2 w-full max-w-[940px] z-20">
             <SearchHistory setIsFocused={setIsFocused} setInputValue={setInputValue} />
           </div>
-        )} */}
+        )}
       </div>
 
       <footer className="fixed bottom-3 text-xs text-[#a3a3a3]">

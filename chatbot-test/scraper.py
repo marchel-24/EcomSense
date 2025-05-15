@@ -121,10 +121,15 @@ def ambil_ulasan_dari_link(url, nama_produk):
     reviews = []
     for article in articles:
         try:
-            span = article.find_element(By.CSS_SELECTOR, "p.css-cvmev1-unf-heading.e1qvo2ff8 > span")
+            review_text = article.find_element(By.CSS_SELECTOR, 
+                "p.css-cvmev1-unf-heading.e1qvo2ff8 > span").text
+            username = article.find_element(By.CSS_SELECTOR, 
+                "div.css-k4rf3m > span").text
+
             reviews.append({
                 'Nama Produk': nama_produk,
-                'Ulasan': span.text,
+                'Username': username,
+                'Ulasan': review_text,
                 'Link Produk': url
             })
         except NoSuchElementException:
