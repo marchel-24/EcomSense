@@ -25,7 +25,7 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
       product_url: productLink
     });
 
-    fetch(`http://localhost:5000/api/favorites?user_id=${userId}`)
+    fetch(`https://ecom-sense-be.vercel.app/api/favorites?user_id=${userId}`)
       .then((res) => res.json())
       .then((favorites) => {
         const found = favorites.some(
@@ -57,7 +57,7 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
 
     if (isFavorite) {
       try {
-        const res = await fetch("http://localhost:5000/api/favorites", {
+        const res = await fetch("https://ecom-sense-be.vercel.app/api/favorites", {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
