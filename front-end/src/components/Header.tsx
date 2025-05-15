@@ -13,15 +13,21 @@ const Header: React.FC<HeaderProps> = ({ hideLogo = false }) => {
   const [photo, setPhoto] = useState<string>("/maudy-ayunda.jpg"); 
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      setName(user.name);
-      if (user.photo) {
-      setPhoto(user.photo); 
-    }
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        setName(user.name);
+        if (user.photo) {
+          setPhoto(user.photo);
+        }
+      }
+    } catch (err) {
+      console.error("❌ Gagal parsing user dari localStorage:", err);
+      localStorage.removeItem("user"); // bersihkan jika rusak
     }
   }, []);
+
 
   return (
     <header className="max-w-[1080px] w-full flex justify-between items-center px-4 sm:px-5 md:px-6 bg-transparent gap-7">

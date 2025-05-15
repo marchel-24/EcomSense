@@ -19,7 +19,6 @@ export default function FavoritePage() {
   const [favoriteProducts, setFavoriteProducts] = useState<FavoriteProduct[]>([]);
   const [screenWidth, setScreenWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
-  // ✅ Fetch data favorit dari backend
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) return;
@@ -42,7 +41,6 @@ export default function FavoritePage() {
       .catch((err) => console.error("Gagal memuat data favorit:", err));
   }, []);
 
-  // ✅ Deteksi lebar layar
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
     handleResize();

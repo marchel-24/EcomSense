@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import GoogleLoginButton from "./GoogleLoginButton";
-import GoogleLogin from "react-google-login";
 
 interface AuthPopUpProps {
   onClose: () => void;
