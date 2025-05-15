@@ -13,7 +13,6 @@ interface ProductCardProps {
 const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLink}) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // ✅ Cek apakah produk sudah difavoritkan saat komponen dimuat
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) return;
@@ -39,7 +38,6 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
       });
   }, [productLink]);
 
-  // ✅ Fungsi simpan favorit ke backend
   const toggleFavorite = async () => {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) {
@@ -58,7 +56,6 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
 
 
     if (isFavorite) {
-      // 🔴 Jika sudah favorite → hapus dari backend
       try {
         const res = await fetch("http://localhost:5000/api/favorites", {
           method: "DELETE",
@@ -80,7 +77,6 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
         console.error("Error saat menghapus favorit:", err);
       }
     } else {
-      // 🟢 Jika belum favorite → tambahkan
       try {
         const res = await fetch("http://localhost:5000/api/favorites", {
           method: "POST",

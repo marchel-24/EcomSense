@@ -1,6 +1,5 @@
 const db = require("../db");
 
-// ✅ Simpan produk favorit
 exports.addFavorite = async (req, res) => {
   const { user_id, product_url, product_price, product_image, store_name } = req.body;
 
@@ -20,7 +19,6 @@ exports.addFavorite = async (req, res) => {
   }
 };
 
-// ✅ Ambil semua produk favorit milik user
 exports.getFavoritesByUser = async (req, res) => {
   const user_id = req.query.user_id;
 
@@ -40,7 +38,6 @@ exports.getFavoritesByUser = async (req, res) => {
   }
 };
 
-// ✅ Hapus produk favorit berdasarkan user_id dan product_url
 exports.deleteFavorite = async (req, res) => {
   console.log("BODY MASUK DELETE:", req.body);
   const { user_id, product_url } = req.body;

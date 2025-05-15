@@ -8,7 +8,7 @@ import SearchHistory from "@/components/SearchHistory";
 
 export default function Home() {
   const [isFocused, setIsFocused] = useState(false);
-  const [inputValue, setInputValue] = useState(""); // State untuk input
+  const [inputValue, setInputValue] = useState("");
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#F7F0EA] text-[#a3a3a3] text-center px-6 ">
@@ -34,12 +34,12 @@ export default function Home() {
       <div className="relative w-[90%] max-w-[940px] flex justify-center">
         <SearchInput setIsFocused={setIsFocused} inputValue={inputValue} setInputValue={setInputValue} />
 
-        {/* Search History */}
+        {/* Search History
         {isFocused && (
           <div className="absolute justify-center top-full mt-2 w-full max-w-[940px] z-20">
             <SearchHistory setIsFocused={setIsFocused} setInputValue={setInputValue} />
           </div>
-        )}
+        )} */}
       </div>
 
       <footer className="fixed bottom-3 text-xs text-[#a3a3a3]">

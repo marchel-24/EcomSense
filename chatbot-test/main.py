@@ -6,7 +6,6 @@ from sentiment import analisis_ulasan
 
 app = FastAPI()
 
-# ✅ Izinkan akses dari semua origin untuk pengujian lokal
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Ganti dengan ['http://localhost:3000'] untuk keamanan

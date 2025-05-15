@@ -12,7 +12,6 @@ import SectionTitle from "@/components/SectionTitle";
 import ScoreAndTitle from "@/components/ScoreAndTitle";
 import { PiSmileySadLight } from "react-icons/pi";
 
-// 🔶 Interface untuk response API
 interface Produk {
   Gambar: string;
   Harga: string;
@@ -68,6 +67,7 @@ export default function Home() {
     ]);
 
     try {
+      // const url = `http://localhost:8000/chatbot?q=${encodeURIComponent(newQuery)}`;
       // const url = `http://20.246.142.181/chatbot?q=${encodeURIComponent(newQuery)}`;
       const url = `/api/chatbot?q=${encodeURIComponent(newQuery)}`;
       const res = await fetch(url);
@@ -86,10 +86,10 @@ export default function Home() {
   };
 
 
-  // ✅ useEffect untuk fetch saat pertama kali load berdasarkan URL
   useEffect(() => {
     if (query) {
-      fetchChatbotData(query); // force = false (default)
+      fetchChatbotData(query);
+      router.replace("/chat");
     }
   }, [query]);
 

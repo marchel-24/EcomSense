@@ -69,7 +69,7 @@ export default function FavoritePage() {
       {/* Back & Title */}
       <div className="mt-4 px-4 md:px-10 lg:px-12">
         <div className="w-full max-w-[1080px] mx-auto flex items-center gap-2">
-          <button onClick={() => router.back()} className="text-orange-500 hover:scale-110 transition">
+          <button onClick={() => router.replace("/")} className="text-orange-500 hover:scale-110 transition">
             <HiArrowLeft className="w-6 h-6" />
           </button>
           <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-orange-500">Favorite</h1>

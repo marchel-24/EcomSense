@@ -14,29 +14,27 @@ exports.googleLogin = async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-    const { email, name } = payload;
+    const { email, name, picture } = payload;
 
-    // Cek apakah user sudah ada
     const existingUser = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
     let userId;
     if (existingUser.rows.length === 0) {
       // Insert user baru
       const result = await db.query(
-        'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id',
-        [name, email]
+        'INSERT INTO users (name, email, profile_picture) VALUES ($1, $2, $3) RETURNING id',
+        [name, email, picture]
       );
       userId = result.rows[0].id;
     } else {
       userId = existingUser.rows[0].id;
     }
 
-    // Buat JWT
     const tokenJwt = jwt.sign({ id: userId, email }, process.env.JWT_SECRET, {
       expiresIn: '7d',
     });
 
-    res.json({ token: tokenJwt, user: { id: userId, name, email } });
+    res.json({ token: tokenJwt, user: { id: userId, name, email, photo:picture } });
   } catch (error) {
     console.error('Login error', error);
     res.status(401).json({ message: 'Invalid Google token' });

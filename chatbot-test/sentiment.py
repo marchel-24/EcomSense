@@ -1,8 +1,12 @@
 from azure.ai.textanalytics import TextAnalyticsClient
 from azure.core.credentials import AzureKeyCredential
+from dotenv import load_dotenv
+import os
 
-key = "665JHIgPORAJLkEwRyuk2ayMq1PmHCMD8I8XEPAHy8k1r3notLG4JQQJ99BEACYeBjFXJ3w3AAAaACOG6Uxh"
-endpoint = "https://ecomsense-sentiment.cognitiveservices.azure.com/"
+load_dotenv()
+
+key = os.getenv("KEY")
+endpoint = os.getenv("ENDPOINT")
 
 credential = AzureKeyCredential(key)
 client = TextAnalyticsClient(endpoint=endpoint, credential=credential)

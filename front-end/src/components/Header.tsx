@@ -4,18 +4,22 @@ import GuideButton from "@/components/GuideButton";
 import ProfileButton from "@/components/ProfileButton";
 
 interface HeaderProps {
-  hideLogo?: boolean; // Prop opsional untuk menyembunyikan logo
+  hideLogo?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({ hideLogo = false }) => {
 
   const [name, setName] = useState<string>("");
+  const [photo, setPhoto] = useState<string>("/maudy-ayunda.jpg"); 
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const user = JSON.parse(storedUser);
-      setName(user.name); // ✅ Ambil nama dari hasil login
+      setName(user.name);
+      if (user.photo) {
+      setPhoto(user.photo); 
+    }
     }
   }, []);
 
@@ -36,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ hideLogo = false }) => {
         </div>
       )}
 
-      <ProfileButton name={name} profilePic="/maudy-ayunda.png" />
+      <ProfileButton name={name} profilePic={photo} />
     </header>
   );
 };
