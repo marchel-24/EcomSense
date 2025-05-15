@@ -1,5 +1,5 @@
 import { addFavorite, getFavoritesByUser, deleteFavorite } from '../../controllers/favoritesController';
-const {applyCors} = require('../_utils/cors');
+const applyCors = require('../_utils/cors');
 
 export default async function handler(req, res) {
   if (applyCors(req, res)) return;

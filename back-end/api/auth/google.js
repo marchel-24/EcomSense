@@ -1,5 +1,5 @@
 import { googleLogin } from '../../controllers/authController';
-const {applyCors} = require("../_utils/cors");
+const applyCors = require("../_utils/cors");
 
 export default async function handler(req, res) {
     if (applyCors(res,req)) return;
