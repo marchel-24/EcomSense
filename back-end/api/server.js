@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
+const serverless = require("serverless-http");
+
 const app = express();
-const db = require("./db");
+const db = require("../db");
 
 const allowedOrigins = [
   "http://localhost:3000",
@@ -21,14 +23,15 @@ app.use(cors({
 
 app.use(express.json());
 
-const authRoutes = require("./routes/authRoutes");
+// Routes
+const authRoutes = require("../routes/authRoutes");
 app.use("/api", authRoutes);
 
-const favoriteRoutes = require("./routes/favoriteRoutes");
+const favoriteRoutes = require("../routes/favoriteRoutes");
 app.use("/api", favoriteRoutes);
 
-// ✅ Endpoint debug koneksi database
-app.get("/debug", async (req, res) => {
+// Debug endpoint
+app.get("/api/debug", async (req, res) => {
   try {
     const result = await db.query("SELECT NOW()");
     res.json({ status: "✅ DB OK", time: result.rows[0].now });
@@ -37,6 +40,6 @@ app.get("/debug", async (req, res) => {
   }
 });
 
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Export as serverless function
+module.exports = app;
+module.exports.handler = serverless(app);
