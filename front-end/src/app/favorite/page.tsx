@@ -26,7 +26,8 @@ export default function FavoritePage() {
     const user = JSON.parse(storedUser);
     const userId = user.id;
 
-    fetch(`http://localhost:5000/api/favorites?user_id=${userId}`)
+    // fetch(`http://localhost:5000/api/favorites?user_id=${userId}`)
+    fetch(`https://ecom-sense-be.vercel.app/api/favorites?user_id=${userId}`)
       .then((res) => res.json())
       .then((data) => {
         const enriched = data.map((item: FavoriteProduct) => ({

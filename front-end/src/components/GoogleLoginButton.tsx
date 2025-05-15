@@ -13,6 +13,7 @@ const GoogleLoginButton = ({ isSignUp }: { isSignUp: boolean }) => {
         console.log("Token dari Google:", token);
 
         try {
+          // const res = await fetch("http://localhost:5000/api/auth/google", {
           const res = await fetch("https://ecom-sense-be.vercel.app/api/auth/google", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
