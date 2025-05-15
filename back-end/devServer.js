@@ -1,4 +1,4 @@
-const app = require("./api/server"); // atau path sesuai isi `api/server.js`
+const app = require("./api/server.old"); // atau path sesuai isi `api/server.js`
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
