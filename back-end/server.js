@@ -27,5 +27,16 @@ app.use("/api", authRoutes);
 const favoriteRoutes = require("./routes/favoriteRoutes");
 app.use("/api", favoriteRoutes);
 
+// ✅ Endpoint debug koneksi database
+app.get("/debug", async (req, res) => {
+  try {
+    const result = await db.query("SELECT NOW()");
+    res.json({ status: "✅ DB OK", time: result.rows[0].now });
+  } catch (e) {
+    res.status(500).json({ status: "❌ DB ERROR", message: e.message });
+  }
+});
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
