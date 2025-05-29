@@ -59,41 +59,67 @@ export default function ChatClient() {
     if (!force && seenQueries.current.has(newQuery)) return;
     if (!seenQueries.current.has(newQuery)) seenQueries.current.add(newQuery);
 
+    // Tambahkan entri awal loading
     setConversations((prev) => [
       ...prev,
       { query: newQuery, response: null, isLoading: true },
     ]);
 
     try {
-      const url = `/api/chatbot?q=${encodeURIComponent(newQuery)}`;
-      const res = await fetch(url);
-      if (!res.ok) {
-        const errorText = await res.text(); // baca apapun isi respon
-        console.error('Fetch failed:', res.status, errorText);
-        throw new Error(`Server responded with status ${res.status}`);
+      // STEP 1: Submit permintaan ke API
+      const submitRes = await fetch(`/api/chatbot?q=${encodeURIComponent(newQuery)}`);
+      const { requestId } = await submitRes.json();
+
+      // STEP 2: Polling status setiap 3 detik
+      let result = null;
+      for (let i = 0; i < 30; i++) { // 30x3 = 90 detik maksimal polling
+        await new Promise((resolve) => setTimeout(resolve, 3000)); // tunggu 3 detik
+        const statusRes = await fetch(`/api/chatbot?id=${requestId}`);
+        const statusData = await statusRes.json();
+
+        if (statusData.status === 'done') {
+          result = statusData.result;
+          break;
+        }
+
+        if (statusData.status === 'error') {
+          throw new Error(statusData.result?.message || 'Scraping failed');
+        }
       }
 
-      const data = await res.json();
-
-
-      setConversations((prev) =>
-        prev.map((item) =>
-          item.query === newQuery && item.response === null
-            ? { ...item, response: data, isLoading: false }
-            : item
-        )
-      );
+      // STEP 3: Update conversation
+      if (result) {
+        setConversations((prev) =>
+          prev.map((item) =>
+            item.query === newQuery && item.response === null
+              ? { ...item, response: result, isLoading: false }
+              : item
+          )
+        );
+      } else {
+        throw new Error('Timeout: scraping took too long');
+      }
     } catch (err) {
       console.error('Fetch error:', err);
       setConversations((prev) =>
         prev.map((item) =>
           item.query === newQuery && item.response === null
-            ? { ...item, response: { Produk: [], Ulasan: [], Kesimpulan: '', "Rata-rata Rating": 0 }, isLoading: false }
+            ? {
+                ...item,
+                isLoading: false,
+                response: {
+                  Produk: [],
+                  Ulasan: [],
+                  Kesimpulan: 'Terjadi kesalahan saat mengambil data.',
+                  "Rata-rata Rating": 0,
+                },
+              }
             : item
         )
       );
     }
   };
+
 
   useEffect(() => {
     if (query) {
