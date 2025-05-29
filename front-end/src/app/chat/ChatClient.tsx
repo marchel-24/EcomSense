@@ -67,7 +67,14 @@ export default function ChatClient() {
     try {
       const url = `/api/chatbot?q=${encodeURIComponent(newQuery)}`;
       const res = await fetch(url);
+      if (!res.ok) {
+        const errorText = await res.text(); // baca apapun isi respon
+        console.error('Fetch failed:', res.status, errorText);
+        throw new Error(`Server responded with status ${res.status}`);
+      }
+
       const data = await res.json();
+
 
       setConversations((prev) =>
         prev.map((item) =>
@@ -78,6 +85,13 @@ export default function ChatClient() {
       );
     } catch (err) {
       console.error('Fetch error:', err);
+      setConversations((prev) =>
+        prev.map((item) =>
+          item.query === newQuery && item.response === null
+            ? { ...item, response: { Produk: [], Ulasan: [], Kesimpulan: '', "Rata-rata Rating": 0 }, isLoading: false }
+            : item
+        )
+      );
     }
   };
 
