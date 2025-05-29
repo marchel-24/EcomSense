@@ -30,30 +30,38 @@ const queue: Record<string, { status: string; result?: any }> = {}
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
   const query = searchParams.get("q");
 
-  if (!query) {
-    return NextResponse.json({ error: "Missing query" }, { status: 400 });
+  // Cek apakah ini permintaan polling status
+  if (id) {
+    if (!queue[id]) {
+      return NextResponse.json({ status: "not_found" }, { status: 404 });
+    }
+    return NextResponse.json(queue[id]);
   }
 
-  const requestId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  // Cek apakah ini permintaan scraping baru
+  if (query) {
+    const requestId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    queue[requestId] = { status: "processing" };
 
-  // Simpan status awal
-  queue[requestId] = { status: "processing" };
+    fetch(`http://20.246.142.181/chatbot?q=${encodeURIComponent(query)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        queue[requestId] = { status: "done", result: data };
+      })
+      .catch((err) => {
+        queue[requestId] = { status: "error", result: { message: err.message } };
+      });
 
-  // Luncurkan scraping tanpa menunggu selesai
-  fetch(`http://20.246.142.181/chatbot?q=${encodeURIComponent(query)}`)
-    .then((res) => res.json())
-    .then((data) => {
-      queue[requestId] = { status: "done", result: data };
-    })
-    .catch((err) => {
-      queue[requestId] = { status: "error", result: { message: err.message } };
-    });
+    return NextResponse.json({ requestId });
+  }
 
-  // Langsung balas ID
-  return NextResponse.json({ requestId });
+  // Jika tidak ada query maupun id
+  return NextResponse.json({ error: "Missing query or id" }, { status: 400 });
 }
+
 
 // Endpoint baru untuk cek status
 export async function POST(req: NextRequest) {
