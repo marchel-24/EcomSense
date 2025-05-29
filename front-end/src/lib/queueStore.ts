@@ -1,0 +1,1 @@
+export const queue: Record<string, { status: string; result?: any }> = {};

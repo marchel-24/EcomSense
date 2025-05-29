@@ -1,5 +1,3 @@
-import { NextRequest, NextResponse } from "next/server";
-
 // export async function GET(req: NextRequest) {
 //   const { searchParams } = new URL(req.url);
 //   const query = searchParams.get("q");
@@ -25,15 +23,16 @@ import { NextRequest, NextResponse } from "next/server";
 //   }
 // }
 
-// Simpan request ID dan status sementara
-const queue: Record<string, { status: string; result?: any }> = {}
+
+import { NextRequest, NextResponse } from 'next/server';
+import { queue } from '@/lib/queueStore'; // pastikan path sesuai
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
   const query = searchParams.get("q");
 
-  // Cek apakah ini permintaan polling status
+  // === Polling status ===
   if (id) {
     if (!queue[id]) {
       return NextResponse.json({ status: "not_found" }, { status: 404 });
@@ -41,7 +40,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(queue[id]);
   }
 
-  // Cek apakah ini permintaan scraping baru
+  // === Submit scraping request ===
   if (query) {
     const requestId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     queue[requestId] = { status: "processing" };
@@ -50,28 +49,16 @@ export async function GET(req: NextRequest) {
       .then((res) => res.json())
       .then((data) => {
         queue[requestId] = { status: "done", result: data };
+        console.log(`✅ Done: ${requestId}`);
       })
       .catch((err) => {
         queue[requestId] = { status: "error", result: { message: err.message } };
+        console.error(`❌ Error: ${requestId}`, err);
       });
 
     return NextResponse.json({ requestId });
   }
 
-  // Jika tidak ada query maupun id
+  // === Invalid request ===
   return NextResponse.json({ error: "Missing query or id" }, { status: 400 });
 }
-
-
-// Endpoint baru untuk cek status
-export async function POST(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("id");
-
-  if (!id || !queue[id]) {
-    return NextResponse.json({ status: "not_found" }, { status: 404 });
-  }
-
-  return NextResponse.json(queue[id]);
-}
-
