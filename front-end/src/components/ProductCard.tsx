@@ -78,7 +78,7 @@ const ProductCard: FC<ProductCardProps> = ({ image, price, storeName, productLin
       }
     } else {
       try {
-        const res = await fetch("http://localhost:5000/api/favorites", {
+        const res = await fetch("https://ecom-sense-be.vercel.app/api/favorites", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
